@@ -1,0 +1,51 @@
+; gMemory.inf
+
+[Version]
+Signature   = "$WINDOWS NT$"
+Class       = System
+ClassGuid   = {4d36e97d-e325-11ce-bfc1-08002be10318}
+Provider    = %ManufacturerName%
+DriverVer   = 05/26/2025,1.0.0.0
+CatalogFile = gMemory.cat
+
+[DestinationDirs]
+DriverCopy = 12 ; 12 = %SystemRoot%\System32\drivers
+
+[SourceDisksNames]
+1 = %DiskName%,,, 
+
+[SourceDisksFiles]
+gMemory.sys = 1
+
+[Manufacturer]
+%ManufacturerName% = Standard,NTamd64
+
+[Standard.NTamd64]
+%gMemory.DeviceDesc% = gMemory_Install, Root\gMemory
+
+[gMemory_Install]
+CopyFiles = DriverCopy
+AddReg = AddReg_GUID
+
+[DriverCopy]
+gMemory.sys
+
+[AddReg_GUID]
+HKR,,DeviceInterfaceGUIDs,0x00010000,"{D67F47C1-6A7A-4F7B-911D-C74E2F956D33}"
+
+[gMemory_Install.Services]
+AddService = gMemory, 0x00000002, gMemory_Service
+
+[gMemory_Service]
+DisplayName    = %gMemory.SVCDESC%
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 1
+ServiceBinary  = %12%\gMemory.sys
+
+[Strings]
+ManufacturerName = "HUST"
+DiskName = "gMemory Installation Disk"
+gMemory.DeviceDesc = "gMemory Device"
+gMemory.SVCDESC = "gMemory Kernel Service"
+

@@ -1,0 +1,52 @@
+; MyWdfDriver.inf
+[Version]
+Signature="$WINDOWS NT$"
+Class=Sample
+ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171}
+Provider=%ManufacturerName%
+DriverVer=05/26/2025,1.0.0.0
+CatalogFile=MyWdfDriver.cat
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTamd64
+
+[Standard.NTamd64]
+%MyDeviceName%=MyDevice_Install, Root\MyDevice
+
+[MyDevice_Install]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+MyWdfDriver.sys
+
+[MyDevice_Install.Services]
+AddService=MyWdfDriver, 0x00000002, MyService_Inst
+
+[MyService_Inst]
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\MyWdfDriver.sys
+
+[MyDevice_Install.Interfaces]
+AddInterface={aabbccdd-1234-5678-abcd-efaabbccdde}, "GLOBAL", MyInterface_Ref
+
+[MyInterface_Ref]
+AddReg=MyInterface_AddReg
+
+[MyInterface_AddReg]
+HKR,,DeviceInterfaceGUIDs,0x10000,"{aabbccdd-1234-5678-abcd-efaabbccdde}"
+
+[DestinationDirs]
+Drivers_Dir=12
+
+[SourceDisksNames]
+1 = %DiskName%,,,
+
+[SourceDisksFiles]
+MyWdfDriver.sys = 1,,
+
+[Strings]
+ManufacturerName="MyCompany"
+MyDeviceName="My WDF Device"
+DiskName="My WDF Driver Installation Disk"
