@@ -1,13 +1,13 @@
 #include <ntddk.h>
 #include <wdf.h>
-#include <initguid.h> // Để dùng DEFINE_GUID
+#include <initguid.h> 
 #include <ntstrsafe.h>
 
-// Định nghĩa GUID cho thiết bị
+
 DEFINE_GUID(GUID_DEVINTERFACE_MyDevice,
             0xaabbccdd, 0x1234, 0x5678, 0xab, 0xcd, 0xef, 0xaa, 0xbb, 0xcc, 0xdd, 0xee);
 
-// IOCTL định nghĩa
+
 #define IOCTL_MY_DRIVER_COMMAND CTL_CODE(FILE_DEVICE_UNKNOWN, 0x801, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 // Prototype
@@ -55,7 +55,7 @@ MyEvtDeviceAdd(
 
     KdPrint(("[Driver kernel] EvtDeviceAdd called\n"));
 
-    // Tạo thiết bị
+ 
     status = WdfDeviceCreate(&DeviceInit, WDF_NO_OBJECT_ATTRIBUTES, &device);
     if (!NT_SUCCESS(status))
     {
@@ -63,7 +63,7 @@ MyEvtDeviceAdd(
         return status;
     }
 
-    // Đăng ký interface dùng GUID
+  
     status = WdfDeviceCreateDeviceInterface(device, &GUID_DEVINTERFACE_MyDevice, NULL);
     if (!NT_SUCCESS(status))
     {
@@ -71,7 +71,7 @@ MyEvtDeviceAdd(
         return status;
     }
 
-    // Tạo hàng đợi IOCTL
+   
     WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&ioQueueConfig, WdfIoQueueDispatchSequential);
     ioQueueConfig.EvtIoDeviceControl = MyEvtIoDeviceControl;
 
@@ -89,7 +89,6 @@ MyEvtDeviceAdd(
     return STATUS_SUCCESS;
 }
 
-// Xử lý IOCTL
 VOID MyEvtIoDeviceControl(
     _In_ WDFQUEUE Queue,
     _In_ WDFREQUEST Request,
